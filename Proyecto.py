@@ -36,3 +36,7 @@ class GestorActividades:
         if prioridad < 1 or prioridad > 5:
             print("⚠️ La prioridad debe estar entre 1 y 5.")
             return
+
+        nueva = Actividad(titulo, fecha, categoria, prioridad)
+        self.actividades.append(nueva)
+        print("Actividad agregada con éxito.")
