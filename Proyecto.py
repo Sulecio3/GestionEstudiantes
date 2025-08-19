@@ -10,3 +10,10 @@ class Actividad:
 class GestorActividades:
     def __init__(self):
         self.actividades = []
+
+    def agregar_actividad(self):
+        print("\n--- Agregar nueva actividad ---")
+        # Se piden datos
+        titulo = input("Ingrese el título de la actividad: ")
+        fecha = input("Ingrese la fecha (ejemplo: YYYY-MM-DD): ")
+        categoria = input("Ingrese la categoría (clase, tarea, examen, reunion, evento, personal): ").lower()
