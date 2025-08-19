@@ -16,7 +16,7 @@ class GestorActividades:
         # Se piden datos
         titulo = input("Ingrese el título de la actividad: ")
         fecha = input("Ingrese la fecha (ejemplo: YYYY-MM-DD): ")
-        categoria = input("Ingrese la categoría (clase, tarea, examen, reunion, evento, personal): ").lower()
+        categoria = input("Ingrese la categoría (clase, tarea, examen, reunion, evento, personal): ").lower()#SUJETA A CAMBIOS
         #La pripridad sera de 1 a 5
         try:
             prioridad = int(input("Ingrese la prioridad (1 a 5): "))
