@@ -30,3 +30,9 @@ class GestorActividades:
         if fecha == "":
             print("⚠️ La fecha no puede estar vacía.")
             return
+
+        #Aqui habra otra validacion de CATEGORIA pero las categorias estan en posibles cambios, entonces despues se verá
+
+        if prioridad < 1 or prioridad > 5:
+            print("⚠️ La prioridad debe estar entre 1 y 5.")
+            return
