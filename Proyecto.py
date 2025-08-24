@@ -59,6 +59,9 @@ class GestorActividades:
         return actividades_ordenadas
     def validar_categoria(self, categoria):
         return categoria.lower() in self.categorias_validas
+    def validad_prioridad(self, prioridad):
+        prioridades_validas = ["urgente", 'alta', 'media', 'baja']
+        return prioridad.lower() in prioridades_validas
     def agregar_actividad(self):
         print("\n--- Agregar nueva actividad ---")
         # Se piden datos
