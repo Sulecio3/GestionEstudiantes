@@ -32,6 +32,7 @@ class GestorActividades:
         nueva = Actividad(titulo, fecha, categoria, prioridad)
         self.actividades.append(nueva)
         print("Actividad agregada con éxito.")
+
     def buscar_por_palabra_clave(self):
         print("\n--- Buscar actividades por palabra clave ---")
         palabra = input("Ingrese una palabra clave: ").lower()
@@ -46,5 +47,5 @@ class GestorActividades:
                 print(
                     f"- Título: {act.titulo}, Fecha: {act.fecha}, Categoría: {act.categoria}, Prioridad: {act.prioridad}")
         else:
-            print(f"\nNo se encontraron actividades con la palabra clave '{palabra}'.")
+            print(f"\nNo se encontraron actividades con la palabra clave '{palabra}'")
 
