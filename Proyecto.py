@@ -84,4 +84,8 @@ class GestorActividades:
         if not self.actividades:
             print("No hay actividades registradas.")
             return
+        actividades_ordenadas = self.ordenar_por_fecha(self.actividades)
+        for i, actividad in enumerate(actividades_ordenadas, 1):
+            print(f"{i}. {actividad}")
+
 
