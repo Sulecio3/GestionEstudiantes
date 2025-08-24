@@ -57,6 +57,8 @@ class GestorActividades:
         for numero, actividad in actividades_con_numeros:
             actividades_ordenadas.append(actividad)
         return actividades_ordenadas
+    def validar_categoria(self, categoria):
+        return categoria.lower() in self.categorias_validas
     def agregar_actividad(self):
         print("\n--- Agregar nueva actividad ---")
         # Se piden datos
