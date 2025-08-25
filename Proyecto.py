@@ -1,42 +1,126 @@
 #Se crea la clase Actividad
 class Actividad:
-    def __init__(self, titulo, fecha, categoria, prioridad):
+    def __init__(self, titulo, fecha, categoria, prioridad, descripcion):
         self.titulo = titulo
         self.fecha = fecha
         self.categoria = categoria
         self.prioridad = prioridad
-
+        self.descripcion = descripcion
+    def show(self):
+        return f"{self.nombre} ({self.fecha}) - {self.categoria} - Prioridad: {self.prioridad}"
 #Se crea la clase que se encargara de gestionar las Actividades
 class GestorActividades:
     def __init__(self):
         self.actividades = []
+        self.categorias_validas = ["Clase", "Tarea", "Proyecto", "Examen", "Lectura", "Reunion", "Taller", "Laboratorio", "Tramite", "Ejercicio", "Social", "Oseo", "Personal"]
+    def pedir_fecha(self):
+        #Aca pedimos la fecha, primero dia, luego mes luego año
+        while True:
+            try:
+                print("Ingrese la fecha: ")
+                dia = int(input(" Día (1-31):"))
+                mes = int(input(" Mes: (1-12)"))
+                year = int(input(" Año: "))
+                if dia < 1 or dia > 31:
+                    print("ERROR. El dia debe estar entre 1 y 31")
+                    continue
+                if mes < 1 or mes > 12:
+                    print("ERROR. El mes debe estar entre 1 y 12")
+                    continue
+                if year < 2000 or year > 2150:
+                    print("ERROR. El año debe estar entre 2000 y 2150")
+                    continue
+                fecha_show = f"{dia}/{mes}/{year}"
+                return fecha_show
+            except ValueError:
+                print('ERROR. Por favor ingresar numeros validos.')
 
+    def convertir_fecha_a_numero(self, fecha_str):
+        #Aca convertimos la fecha a un numero normal, para ordenarlo de menor a mayor
+        partes = fecha_str.split('/')
+        dia = int(partes[0])
+        mes = int(partes[1])
+        year = int(partes[2])
+        numero_fecha = year * 10000 + mes * 100 + dia
+        return numero_fecha
+
+    def ordenar_por_fecha(self, actividades):
+        # Creamos una lista de tuplas (número_fecha, actividad)
+        actividades_con_numeros = []
+        for actividad in actividades:
+            numero_fecha = self.convertir_fecha_a_numero(actividad.fecha)
+            actividades_con_numeros.append((numero_fecha, actividad))
+        # Ordenar por el número de fecha con la funcion sort
+        actividades_con_numeros.sort()
+        # Extraer solo las actividades ordenadas
+        actividades_ordenadas = []
+        for numero, actividad in actividades_con_numeros:
+            actividades_ordenadas.append(actividad)
+        return actividades_ordenadas
+    def validar_categoria(self, categoria):
+        return categoria.lower() in self.categorias_validas
+    def validad_prioridad(self, prioridad):
+        prioridades_validas = ["urgente", 'alta', 'media', 'baja']
+        return prioridad.lower() in prioridades_validas
     def agregar_actividad(self):
         print("\n--- Agregar nueva actividad ---")
         # Se piden datos
         titulo = input("Ingrese el título de la actividad: ")
         fecha = input("Ingrese la fecha (ejemplo: YYYY-MM-DD): ")
         categoria = input("Ingrese la categoría (clase, tarea, examen, reunion, evento, personal): ").lower()#SUJETA A CAMBIOS
-        #La pripridad sera de 1 a 5
+        #La prioridad sera de 1 a 5
         try:
             prioridad = int(input("Ingrese la prioridad (1 a 5): "))
         except ValueError:
             print("La prioridad debe ser un número entero.")
             return
 
-        if titulo == "":
-            print("⚠️ El título no puede estar vacío.")
-            return
-        if fecha == "":
-            print("⚠️ La fecha no puede estar vacía.")
-            return
-
-        #Aqui habra otra validacion de CATEGORIA pero las categorias estan en posibles cambios, entonces despues se verá
-
-        if prioridad < 1 or prioridad > 5:
-            print("⚠️ La prioridad debe estar entre 1 y 5.")
-            return
-
         nueva = Actividad(titulo, fecha, categoria, prioridad)
         self.actividades.append(nueva)
         print("Actividad agregada con éxito.")
+
+    def listar_actividades(self):
+        print("\n ----- ACTIVIDADES -----")
+        if not self.actividades:
+            print("No hay actividades registradas.")
+            return
+        actividades_ordenadas = self.ordenar_por_fecha(self.actividades)
+        for i, actividad in enumerate(actividades_ordenadas, 1):
+            print(f"{i}. {actividad}")
+        print(f"\n Por categoria:")
+        for categoria in self.categorias_validas:
+            count = 0
+            for actividad in actividades_ordenadas:
+                if actividad.categoria == categoria:
+                    count += 1
+                if count > 0:
+                    print( f"Total general: {len(self.actividades)} actividades")
+
+class Eliminar:
+    def __init__(self):
+        self.actividades = []
+
+    def eliminar_actividad(self):
+        if not self.actividades:
+            print("No hay actividades registradas.")
+            return
+
+        print("\n Eliminar actividad ")
+        for i, actividad in enumerate(self.actividades, 1):
+            print(i)
+            print("Título:", actividad.titulo)
+            print("Fecha:", actividad.fecha)
+            print("Categoría:", actividad.categoria)
+            print("Prioridad:", actividad.prioridad)
+            print("")
+
+        try:
+            opcion = int(input("Ingrese el número de la actividad a eliminar: "))
+            if opcion < 1 or opcion > len(self.actividades):
+                print("Opción inválida.")
+                return
+            eliminada = self.actividades.pop(opcion - 1)
+            print("La actividad fue eliminada con éxito.")
+            print("Título:", eliminada.titulo)
+        except ValueError:
+            print("ERROR. Debe ingresar un número válido.")
