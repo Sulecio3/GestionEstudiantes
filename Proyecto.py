@@ -62,6 +62,20 @@ class GestorActividades:
     def validad_prioridad(self, prioridad):
         prioridades_validas = ["urgente", 'alta', 'media', 'baja']
         return prioridad.lower() in prioridades_validas
+    def mostrar_menu_categorias(self):
+        while True:
+            self.mostrar_menu_categorias()
+            try:
+                opcion = input("\n Seleccione una categoria por su numero: ").strip()
+                numero = int(opcion)
+                if 1 <= numero <= len(self.categorias_validas):
+                    categoria_seleccion = self.categorias_validas[numero - 1]
+                    print(f'Seleccionada: {categoria_seleccion}')
+                    return categoria_seleccion
+                else:
+                    print("ERROR. El numero esta fuera del rango, intentar nuevamente.")
+            except ValueError:
+                print('ERROR. Ingresar un numero valido')
     def agregar_actividad(self):
         print("\n--- Agregar nueva actividad ---")
         # Se piden datos
@@ -99,7 +113,6 @@ class GestorActividades:
     def buscar_por_palabra_clave(self):
         print("\n--- Buscar actividades por palabra clave ---")
         palabra = input("Ingrese una palabra clave: ").lower()
-
         encontrados = []
         for act in self.actividades:
             if palabra in act.titulo.lower() or palabra in act.categoria.lower():
