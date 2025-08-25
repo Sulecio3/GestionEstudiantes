@@ -87,5 +87,12 @@ class GestorActividades:
         actividades_ordenadas = self.ordenar_por_fecha(self.actividades)
         for i, actividad in enumerate(actividades_ordenadas, 1):
             print(f"{i}. {actividad}")
-
+        print(f"\n Por categoria:")
+        for categoria in self.categorias_validas:
+            count = 0
+            for actividad in actividades_ordenadas:
+                if actividad.categoria == categoria:
+                    count += 1
+                if count > 0:
+                    print( f"Total general: {len(self.actividades)} actividades")
 
