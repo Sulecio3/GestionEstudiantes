@@ -124,3 +124,4 @@ class Eliminar:
             print("Título:", eliminada.titulo)
         except ValueError:
             print("ERROR. Debe ingresar un número válido.")
+
