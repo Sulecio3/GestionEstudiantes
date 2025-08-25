@@ -63,6 +63,10 @@ class GestorActividades:
         prioridades_validas = ["urgente", 'alta', 'media', 'baja']
         return prioridad.lower() in prioridades_validas
     def mostrar_menu_categorias(self):
+        print("\n🏷️  --- CATEGORÍAS DISPONIBLES ---")
+        for i, categoria in enumerate(self.categorias_validas, 1):
+            print(f"{i}. {categoria.capitalize()}")
+    def seleccion_categorias(self):
         while True:
             self.mostrar_menu_categorias()
             try:
