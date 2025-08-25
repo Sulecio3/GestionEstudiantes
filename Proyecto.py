@@ -1,165 +1,171 @@
 #Se crea la clase Actividad
 class Actividad:
-    def __init__(self, titulo, fecha, categoria, prioridad, descripcion):
+    def __init__(self, titulo, categoria, prioridad):
         self.titulo = titulo
-        self.fecha = fecha
         self.categoria = categoria
         self.prioridad = prioridad
-        self.descripcion = descripcion
+
     def show(self):
-        return f"{self.nombre} ({self.fecha}) - {self.categoria} - Prioridad: {self.prioridad}"
+        return f"Titulo: {self.titulo} - Categoria: {self.categoria} - Prioridad: {self.prioridad}"
+
 #Se crea la clase que se encargara de gestionar las Actividades
 class GestorActividades:
     def __init__(self):
         self.actividades = []
+        # Lista de categorías válidas
         self.categorias_validas = ["Clase", "Tarea", "Proyecto", "Examen", "Lectura", "Reunion", "Taller", "Laboratorio", "Tramite", "Ejercicio", "Social", "Oseo", "Personal"]
-    def pedir_fecha(self):
-        #Aca pedimos la fecha, primero dia, luego mes luego año
-        while True:
-            try:
-                print("Ingrese la fecha: ")
-                dia = int(input(" Día (1-31):"))
-                mes = int(input(" Mes: (1-12)"))
-                year = int(input(" Año: "))
-                if dia < 1 or dia > 31:
-                    print("ERROR. El dia debe estar entre 1 y 31")
-                    continue
-                if mes < 1 or mes > 12:
-                    print("ERROR. El mes debe estar entre 1 y 12")
-                    continue
-                if year < 2000 or year > 2150:
-                    print("ERROR. El año debe estar entre 2000 y 2150")
-                    continue
-                fecha_show = f"{dia}/{mes}/{year}"
-                return fecha_show
-            except ValueError:
-                print('ERROR. Por favor ingresar numeros validos.')
+        # Lista de prioridades validas
+        self.prioridades_validas = ["Urgente", "Alta", "Media", "Baja"]
 
-    def convertir_fecha_a_numero(self, fecha_str):
-        #Aca convertimos la fecha a un numero normal, para ordenarlo de menor a mayor
-        partes = fecha_str.split('/')
-        dia = int(partes[0])
-        mes = int(partes[1])
-        year = int(partes[2])
-        numero_fecha = year * 10000 + mes * 100 + dia
-        return numero_fecha
-
-    def ordenar_por_fecha(self, actividades):
-        # Creamos una lista de tuplas (número_fecha, actividad)
-        actividades_con_numeros = []
-        for actividad in actividades:
-            numero_fecha = self.convertir_fecha_a_numero(actividad.fecha)
-            actividades_con_numeros.append((numero_fecha, actividad))
-        # Ordenar por el número de fecha con la funcion sort
-        actividades_con_numeros.sort()
-        # Extraer solo las actividades ordenadas
-        actividades_ordenadas = []
-        for numero, actividad in actividades_con_numeros:
-            actividades_ordenadas.append(actividad)
-        return actividades_ordenadas
-    def validar_categoria(self, categoria):
-        return categoria.lower() in self.categorias_validas
-    def validad_prioridad(self, prioridad):
-        prioridades_validas = ["urgente", 'alta', 'media', 'baja']
-        return prioridad.lower() in prioridades_validas
     def mostrar_menu_categorias(self):
-        print("\n--- CATEGORÍAS DISPONIBLES ---")
-        for i, categoria in enumerate(self.categorias_validas, 1):
-            print(f"{i}. {categoria.capitalize()}")
+        print("\n--- Categorías disponibles ---")
+        i = 1
+        for categoria in self.categorias_validas:
+            print(f"{i}. {categoria}")
+            i += 1
+
     def seleccion_categorias(self):
         while True:
             self.mostrar_menu_categorias()
             try:
-                opcion = input("\n Seleccione una categoria por su numero: ").strip()
+                opcion = input("\nSeleccione una categoria por su numero: ").strip()
                 numero = int(opcion)
                 if 1 <= numero <= len(self.categorias_validas):
                     categoria_seleccion = self.categorias_validas[numero - 1]
                     print(f'Seleccionada: {categoria_seleccion}')
                     return categoria_seleccion
                 else:
-                    print("ERROR. El numero esta fuera del rango, intentar nuevamente.")
+                    print("ERROR. El número está fuera del rango, intentar nuevamente.")
             except ValueError:
-                print('ERROR. Ingresar un numero valido')
+                print("ERROR. Ingresar un número válido :(")
+
     def agregar_actividad(self):
         print("\n--- Agregar nueva actividad ---")
-        # Se piden datos
-        titulo = input("Ingrese el título de la actividad: ")
-        fecha = input("Ingrese la fecha (ejemplo: DD/MM/YYYY): ")
-        categoria = input("Ingrese la categoría (clase, tarea, examen, reunion, evento, personal): ").lower()
+        titulo = input("Nombre de la actividad: ")
+        categoria = self.seleccion_categorias()
+
+        print("\n--- Niveles de prioridad ---")
+        i = 1
+        for p in self.prioridades_validas:
+            print(f"{i}. {p}")
+            i += 1
         try:
-            prioridad = int(input("Ingrese la prioridad (urgente, alta, media, baja): "))
+            opcion = int(input("Elige la prioridad: "))
+            if 1 <= opcion <= len(self.prioridades_validas):
+                prioridad = self.prioridades_validas[opcion - 1]
+            else:
+                print("Número fuera de rango, se pondrá 'Media' -_-")
+                prioridad = "Media"
         except ValueError:
-            print("La prioridad debe ser una de las opciones.")
-            return
-        nueva = Actividad(titulo, fecha, categoria, prioridad)
+            print("Eso no fue un número, se pondrá 'Media' :(")
+            prioridad = "Media"
+
+        nueva = Actividad(titulo, categoria, prioridad)
         self.actividades.append(nueva)
-        print("Actividad agregada con éxito.")
+        print("Actividad guardada con éxito :)")
 
     def listar_actividades(self):
-        print("\n ----- ACTIVIDADES -----")
+        print("\n--- Tus actividades ---")
         if not self.actividades:
-            print("No hay actividades registradas.")
+            print("Aún no tienes actividades registradas :(")
             return
-        actividades_ordenadas = self.ordenar_por_fecha(self.actividades)
-        for i, actividad in enumerate(actividades_ordenadas, 1):
-            print(f"{i}. {actividad}")
-        print(f"\n Por categoria:")
-        for categoria in self.categorias_validas:
-            count = 0
-            for actividad in actividades_ordenadas:
-                if actividad.categoria == categoria:
-                    count += 1
-                if count > 0:
-                    print( f"Total general: {len(self.actividades)} actividades")
+        i = 1
+        for act in self.actividades:
+            print(f"{i}. {act.show()}")
+            i += 1
 
     def buscar_por_categoria(self):
-        if not self.actividades:
-            print("No hay actividades para buscar")
-            return
-
-        self.mostrar_opciones(self.categorias_validas, "CATEGORIAS DISPONIBLES")
-        categoria = self.seleccionar_opcion(self.categorias_validas, "Seleccione categoria: ")
-        if not categoria: return
-
-        resultados = [act for act in self.actividades if act.categoria == categoria]
-
-        if not resultados:
-            print(f"No hay actividades en {categoria}")
-            return
-
-        print(f"\nActividades en {categoria}:")
-        for i, act in enumerate(self.ordenar_por_fecha(resultados), 1):
-            print(f"{i}. {act}")
+        categoria = self.seleccion_categorias()
+        encontrados = [act for act in self.actividades if act.categoria.lower() == categoria.lower()]
+        if encontrados:
+            print(f"\nActividades en la categoría '{categoria}':")
+            for act in encontrados:
+                print(f"- {act.show()}")
+        else:
+            print("No hay actividades en esa categoría -_-")
 
     def buscar_por_prioridad(self):
-        if not self.actividades:
-            print("No hay actividades para buscar")
-            return
+        print("\n--- Prioridades disponibles ---")
+        i = 1
+        for p in self.prioridades_validas:
+            print(f"{i}. {p}")
+            i += 1
+        try:
+            opcion = int(input("Elige una prioridad: "))
+            if 1 <= opcion <= len(self.prioridades_validas):
+                prioridad = self.prioridades_validas[opcion - 1]
+                encontrados = [act for act in self.actividades if act.prioridad.lower() == prioridad.lower()]
+                if encontrados:
+                    print(f"\nActividades con prioridad '{prioridad}':")
+                    for act in encontrados:
+                        print(f"- {act.show()}")
+                else:
+                    print("No hay actividades con esa prioridad :(")
+            else:
+                print("Número inválido -_-")
+        except ValueError:
+            print("Eso no fue un número :(")
 
-        self.mostrar_opciones(self.prioridades_validas, "PRIORIDADES DISPONIBLES")
-        prioridad = self.seleccionar_opcion(self.prioridades_validas, "Seleccione prioridad: ")
-        if not prioridad: return
-
-        resultados = [act for act in self.actividades if act.prioridad == prioridad]
-
-        if not resultados:
-            print(f"No hay actividades con prioridad {prioridad}")
-            return
-
-        print(f"\nActividades con prioridad {prioridad}:")
-        for i, act in enumerate(self.ordenar_por_fecha(resultados), 1):
-            print(f"{i}. {act}")
     def buscar_por_palabra_clave(self):
-        print("\n--- Buscar actividades por palabra clave ---")
-        palabra = input("Ingrese una palabra clave: ").lower()
+        palabra = input("Escribe una palabra clave para buscar en los títulos: ").lower()
         encontrados = []
         for act in self.actividades:
-            if palabra in act.titulo.lower() or palabra in act.categoria.lower():
+            if palabra in act.titulo.lower():
                 encontrados.append(act)
         if encontrados:
-            print(f"\nActividades encontradas con la palabra clave '{palabra}':")
+            print(f"\nSe encontraron estas actividades con '{palabra}':")
             for act in encontrados:
-                print(
-                    f"- Título: {act.titulo}, Fecha: {act.fecha}, Categoría: {act.categoria}, Prioridad: {act.prioridad}")
+                print(f"- {act.show()}")
         else:
-            print(f"\nNo se encontraron actividades con la palabra clave '{palabra}'")
+            print("Nada encontrado con esa palabra :(")
+
+    def eliminar_actividad(self):
+        if not self.actividades:
+            print("No tienes actividades para borrar :(")
+            return
+        self.listar_actividades()
+        try:
+            opcion = int(input("\nNúmero de la actividad que quieres borrar: "))
+            if 1 <= opcion <= len(self.actividades):
+                eliminada = self.actividades.pop(opcion - 1)
+                print(f"Actividad eliminada: '{eliminada.titulo}' :)")
+            else:
+                print("Ese número no existe -_-")
+        except ValueError:
+            print("Pon un número válido :(")
+
+#SE CREA EL MENU PRINCIPAL
+gestor = GestorActividades()
+
+while True:
+    print("\n===== Menú principal =====")
+    print("1. Agregar actividad")
+    print("2. Listar actividades")
+    print("3. Buscar por palabra clave (en títulos)")
+    print("4. Buscar por categoría")
+    print("5. Buscar por prioridad")
+    print("6. Eliminar actividad")
+    print("7. Salir")
+
+    try:
+        opcion = int(input("Elige una opción: "))
+        match opcion:
+            case 1:
+                gestor.agregar_actividad()
+            case 2:
+                gestor.listar_actividades()
+            case 3:
+                gestor.buscar_por_palabra_clave()
+            case 4:
+                gestor.buscar_por_categoria()
+            case 5:
+                gestor.buscar_por_prioridad()
+            case 6:
+                gestor.eliminar_actividad()
+            case 7:
+                print("Cerrando el programa... bye :)")
+                break
+            case _:
+                print("Opción inválida -_-")
+    except ValueError:
+        print("Eso no fue un número :(")
