@@ -63,7 +63,7 @@ class GestorActividades:
         prioridades_validas = ["urgente", 'alta', 'media', 'baja']
         return prioridad.lower() in prioridades_validas
     def mostrar_menu_categorias(self):
-        print("\n🏷️  --- CATEGORÍAS DISPONIBLES ---")
+        print("\n--- CATEGORÍAS DISPONIBLES ---")
         for i, categoria in enumerate(self.categorias_validas, 1):
             print(f"{i}. {categoria.capitalize()}")
     def seleccion_categorias(self):
@@ -84,12 +84,12 @@ class GestorActividades:
         print("\n--- Agregar nueva actividad ---")
         # Se piden datos
         titulo = input("Ingrese el título de la actividad: ")
-        fecha = input("Ingrese la fecha (ejemplo: YYYY-MM-DD): ")
+        fecha = input("Ingrese la fecha (ejemplo: DD/MM/YYYY): ")
         categoria = input("Ingrese la categoría (clase, tarea, examen, reunion, evento, personal): ").lower()
         try:
-            prioridad = int(input("Ingrese la prioridad (1 a 5): "))
+            prioridad = int(input("Ingrese la prioridad (urgente, alta, media, baja): "))
         except ValueError:
-            print("La prioridad debe ser un número entero.")
+            print("La prioridad debe ser una de las opciones.")
             return
         nueva = Actividad(titulo, fecha, categoria, prioridad)
         self.actividades.append(nueva)
@@ -112,6 +112,43 @@ class GestorActividades:
                 if count > 0:
                     print( f"Total general: {len(self.actividades)} actividades")
 
+    def buscar_por_categoria(self):
+        if not self.actividades:
+            print("No hay actividades para buscar")
+            return
+
+        self.mostrar_opciones(self.categorias_validas, "CATEGORIAS DISPONIBLES")
+        categoria = self.seleccionar_opcion(self.categorias_validas, "Seleccione categoria: ")
+        if not categoria: return
+
+        resultados = [act for act in self.actividades if act.categoria == categoria]
+
+        if not resultados:
+            print(f"No hay actividades en {categoria}")
+            return
+
+        print(f"\nActividades en {categoria}:")
+        for i, act in enumerate(self.ordenar_por_fecha(resultados), 1):
+            print(f"{i}. {act}")
+
+    def buscar_por_prioridad(self):
+        if not self.actividades:
+            print("No hay actividades para buscar")
+            return
+
+        self.mostrar_opciones(self.prioridades_validas, "PRIORIDADES DISPONIBLES")
+        prioridad = self.seleccionar_opcion(self.prioridades_validas, "Seleccione prioridad: ")
+        if not prioridad: return
+
+        resultados = [act for act in self.actividades if act.prioridad == prioridad]
+
+        if not resultados:
+            print(f"No hay actividades con prioridad {prioridad}")
+            return
+
+        print(f"\nActividades con prioridad {prioridad}:")
+        for i, act in enumerate(self.ordenar_por_fecha(resultados), 1):
+            print(f"{i}. {act}")
     def buscar_por_palabra_clave(self):
         print("\n--- Buscar actividades por palabra clave ---")
         palabra = input("Ingrese una palabra clave: ").lower()
