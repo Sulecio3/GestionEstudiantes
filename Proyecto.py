@@ -85,14 +85,12 @@ class GestorActividades:
         # Se piden datos
         titulo = input("Ingrese el título de la actividad: ")
         fecha = input("Ingrese la fecha (ejemplo: YYYY-MM-DD): ")
-        categoria = input("Ingrese la categoría (clase, tarea, examen, reunion, evento, personal): ").lower()#SUJETA A CAMBIOS
-        #La prioridad sera de 1 a 5
+        categoria = input("Ingrese la categoría (clase, tarea, examen, reunion, evento, personal): ").lower()
         try:
             prioridad = int(input("Ingrese la prioridad (1 a 5): "))
         except ValueError:
             print("La prioridad debe ser un número entero.")
             return
-
         nueva = Actividad(titulo, fecha, categoria, prioridad)
         self.actividades.append(nueva)
         print("Actividad agregada con éxito.")
