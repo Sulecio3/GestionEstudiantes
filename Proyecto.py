@@ -96,3 +96,18 @@ class GestorActividades:
                 if count > 0:
                     print( f"Total general: {len(self.actividades)} actividades")
 
+    def buscar_por_palabra_clave(self):
+        print("\n--- Buscar actividades por palabra clave ---")
+        palabra = input("Ingrese una palabra clave: ").lower()
+
+        encontrados = []
+        for act in self.actividades:
+            if palabra in act.titulo.lower() or palabra in act.categoria.lower():
+                encontrados.append(act)
+        if encontrados:
+            print(f"\nActividades encontradas con la palabra clave '{palabra}':")
+            for act in encontrados:
+                print(
+                    f"- Título: {act.titulo}, Fecha: {act.fecha}, Categoría: {act.categoria}, Prioridad: {act.prioridad}")
+        else:
+            print(f"\nNo se encontraron actividades con la palabra clave '{palabra}'")
