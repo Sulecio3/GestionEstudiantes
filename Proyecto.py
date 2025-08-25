@@ -95,3 +95,4 @@ class GestorActividades:
 
         for i, actividad in enumerate(actividades, 1):
             print(f"{i}. {actividad.titulo} - {actividad.fecha} - {actividad.categoria} - Prioridad: {actividad.prioridad}")
+
