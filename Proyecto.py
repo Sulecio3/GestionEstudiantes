@@ -129,7 +129,6 @@ class GestorActividades:
 
 # SE CREA EL MENU PRINCIPAL
 gestor = GestorActividades()
-
 while True:
     print("\n===== Menú principal =====")
     print("1. Agregar actividad")
