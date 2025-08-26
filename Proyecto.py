@@ -139,7 +139,6 @@ while True:
     print("5. Buscar por prioridad")
     print("6. Eliminar actividad")
     print("7. Salir")
-
     try:
         opcion = int(input("Elige una opción: "))
         match opcion:
